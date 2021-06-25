@@ -18,6 +18,9 @@ def question_answer(subject_id):
         d[i]['options'].append(d[i]['correct_answer'])
         random.shuffle(d[i]['options'])
         d[i]['id']=i
+        for z in ['&quot;','&ldquo;','&rdquo;','&#039;','&deg;']:
+            d[i]['question'] = d[i]['question'].replace(z, '')
+
     return d
 
 

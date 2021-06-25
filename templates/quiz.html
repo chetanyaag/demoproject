@@ -10,9 +10,10 @@
     <div class="row">
 
     {% for i in quiz.options %}
-        <div class="col-md-3">
-            <button type="button"  id="{{i}}" onclick="check('{{i}}','{{quiz.correct_answer}}','j{{quiz.id}}')" class="btn btn-default " ><h4>{{i}} </h4></button>
+        <div class="col-md-6" >
+            <button type="button"  id="{{i}}" onclick="check('{{i}}','{{quiz.correct_answer}}','j{{quiz.id}}')" class="btn btn-default " style="margin:25px" ><h4>{{i}} </h4></button>
         </div>
+
 
 
     {% endfor %}
