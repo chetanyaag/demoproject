@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="post" action="result" onsubmit="tim()">
+    {% csrf_token %}
+{% for quiz in quiz_data %}
+
+<div class="well well-lg"  id="j{{quiz.id}}"  style="display:none">
+<h3 align="center" id="Q{{quiz.id}}">{{ quiz.question }}</h3><br>
+    <div class="row">
+
+    {% for i in quiz.options %}
+        <div class="col-md-3">
+            <button type="button"  id="{{i}}" onclick="check('{{i}}','{{quiz.correct_answer}}','j{{quiz.id}}')" class="btn btn-default " ><h4>{{i}} </h4></button>
+        </div>
+
+
+    {% endfor %}
+
+        <input  name="q{{quiz.id}}" id="q{{quiz.id}}" style="display:none;">
+        <input name="s{{quiz.id}}" id="s{{quiz.id}}" style="display:none;">
+        <input name="c{{quiz.id}}" id="c{{quiz.id}}" style="display:none;">
+        <input name="N{{quiz.id}}" id="N{{quiz.id}}" type="number" style="display:none;">
+
+    </div>
+    <br><br>
+    <input name="t{{quiz.id}}" type="number" id="t{{quiz.id}}" style="display:none;">
+    <center>
+    <button  type="button" class="btn btn-success" id="n{{quiz.id}}" style="width:150px;" onclick="kil('j{{quiz.id}}','S{{quiz.id}}','{{quiz.correct_answer}}'); "><h5>Next</h5></button>
+    <button  type="submit" class="btn btn-success" id="S{{quiz.id}}" style="width:150px; display:none " ><h5>Submit</h5></button>
+    </center>
+</div>
+{% endfor%}
+    </form>
+<script>
+
+        function check(id,correct_answer,sid){
+        if (id != correct_answer) {
+        var status = 0;
+        document.getElementById(id).style.backgroundColor = 'Red';
+        document.getElementById(correct_answer).style.backgroundColor = 'green';
+        }else if  (id == correct_answer){
+        var status = 1;
+        document.getElementById(id).style.backgroundColor = 'green';
+        }
+        var ele = document.getElementById(sid);
+        for(let i=0; i<4; i++){
+        ele.getElementsByClassName("btn btn-default ")[i].disabled = true;
+        }
+
+
+        suf = sid.split('');
+        qid = ('q' + suf[1]);
+        sid = ('s' + suf[1]);
+        cid = ('c' + suf[1]);
+        Qid = ('Q' + suf[1]);
+        Nid = ('N' + suf[1]);
+        var Q =  document.getElementById(Qid).textContent;
+        document.getElementById(qid).value = Q;
+        document.getElementById(sid).value = id;
+        document.getElementById(cid).value = correct_answer;
+        document.getElementById(Nid).value = status;
+
+        }
+
+        </script>
+<script>
+
+document.getElementById("j0").style.display="block";
+function kil(x,Sid,c){
+document.getElementById(x).style.display="none";
+y= x.split('');
+var z = y[0]+(parseInt(y[1])+1);
+document.getElementById(z).style.display="block";
+
+if (z == 'j9'){
+document.getElementById("n9").style.display="none";
+document.getElementById("S9").style.display="block";
+}
+seid = ('s'+y[1]);
+var selected = document.getElementById(seid).value;
+if (selected==''){
+       document.getElementById(('q'+y[1])).value = document.getElementById(('Q'+y[1])).textContent;;
+       document.getElementById(seid).value = 'blank';
+       document.getElementById(('c'+y[1])).value = c ;
+       document.getElementById(('N'+y[1])).value = 0;
+}
+
+
+
+}
+
+</script>
+<script>
+    var d = new Date();
+    var s = d.getTime();
+    function tim(){
+    var n = new Date().getTime();
+    var time = ((n-s)/1000)
+    document.getElementById("t9").value = time;
+    if (document.getElementById('s9').value ==''){
+       document.getElementById('q9').value = document.getElementById(('Q9')).textContent;;
+       document.getElementById('s9').value = 'blank';
+       document.getElementById('c9').value = 'blank' ;
+       document.getElementById('N9').value = 0;
+
+    }
+    console.log(n)
+    console.log(s)
+    }
+
+
+</script>
+{% endblock %}
