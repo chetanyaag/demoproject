@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-_gy*^zmtx4t#2agjz_o9$8!mi!_w9dmr70xat)v!*ltt&^k-4j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['quizapptree.herokuapp.com']
 
 
 # Application definition
