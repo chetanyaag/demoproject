@@ -6,7 +6,7 @@ from .models import *
 import requests
 import json
 import random
-
+import re
 
 def question_answer(subject_id):
     id =str(subject_id)
@@ -55,12 +55,15 @@ def home(request):
     context = {'subjects': subject}
     return render(request, 'index.html', context)
 
-def emailExist(email):
-    user = User.objects.filter(email=email).first()
-    if user:
-        b = True
+def emailExist_and_Verify(email):
+    if (re.search(r'([\w\.-]+)@([\w\.-]+)\.([\w\.-]+)', email)) is None:
+        b = False
     else:
-        b= False
+        user = User.objects.filter(email=email).first()
+        if user:
+           b = True
+        else:
+            b = False
     return b
 
 
@@ -85,7 +88,9 @@ def register(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         email = request.POST.get('email')
-        flag = emailExist(email)
+        if username =='' or email=='' or password=='' :
+            return render(request, 'register.html', {'msg':'Fill all the fields'})
+        flag = emailExist_and_Verify(email)
         if flag:
             return render(request, 'register.html', {'msg': 'Email already exists'})
         user = User(username=username, email=email)
