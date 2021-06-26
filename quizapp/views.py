@@ -12,24 +12,56 @@ def question_answer(subject_id):
     id =str(subject_id)
     r = requests.get("https://opentdb.com/api.php?amount=10&category="+id+"&type=multiple")
     fetch_data = json.loads(r.content)
-    d = fetch_data['results']
+    data = fetch_data['results']
+    nd = modify(data)
+    return nd
+
+
+def modify(d):
     for i in range(10):
+        d[i]['id'] = i
+        d[i]['question'] = clean(d[i]['question'])
+        d[i]['correct_answer'] = clean(d[i]['correct_answer'])
+        d[i]['incorrect_answers'] = [clean(k) for k in d[i]['incorrect_answers']]
         d[i]['options'] = list(d[i]['incorrect_answers'])
         d[i]['options'].append(d[i]['correct_answer'])
         random.shuffle(d[i]['options'])
-        d[i]['id']=i
-        for z in ['&quot;','&ldquo;','&rdquo;','&#039;','&deg;']:
-            d[i]['question'] = d[i]['question'].replace(z, '')
-
     return d
 
 
+def clean(var):
+    for z in ['&quot;', '&ldquo;', '&rdquo;', '&#039;', '&deg;', '&amp;','&Ouml;', '&ouml;', '&uuml;','&amp;','&pi;','&delta;', '&Delta;', '&prime;', '&Prime;','&eacute;']:
+        replacewith = z
+        replaceby = ''
+        if z == '&pi;':
+            replaceby = 'pi '
+        if z == '&delta;':
+            replaceby='Delta '
+        if z == '&Delta;':
+            replaceby='Delta'
+        if z == '&prime;':
+            replaceby='FEET '
+        if z == '&Prime;':
+            replaceby='INCH'
+        if z == '& eacute;':
+            replaceby = 'e'
+
+        var = var.replace(replacewith, replaceby)
+    return var
 
 # Create your views here.
 def home(request):
     subject = Subject.objects.all()
     context = {'subjects': subject}
     return render(request, 'index.html', context)
+
+def emailExist(email):
+    user = User.objects.filter(email=email).first()
+    if user:
+        b = True
+    else:
+        b= False
+    return b
 
 
 
@@ -52,7 +84,10 @@ def register(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        email= request.POST.get('email')
+        email = request.POST.get('email')
+        flag = emailExist(email)
+        if flag:
+            return render(request, 'register.html', {'msg': 'Email already exists'})
         user = User(username=username, email=email)
         user.set_password(password)
         user.save()
@@ -70,14 +105,13 @@ def Login(request):
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
         if user is None:
-            return HttpResponse("you are not registered with this")
+            context = {'msg': 'something is wrong'}
+            return render(request, 'login.html', context)
         else:
             login(request, user)
             subject = Subject.objects.all()
             context = {'subjects': subject}
             return render(request, 'index.html', context)
-
-
     else:
         return render(request, 'login.html')
 
@@ -85,11 +119,10 @@ def Login(request):
 
 def Logout(request):
     logout(request)
-    return  render(request, 'login.html')
+    return render(request, 'login.html')
 
 
 def result(request):
-    index = range(10)
     if request.method == 'POST':
         name = request.user.username
         username = User.objects.get(username=name)
@@ -97,9 +130,9 @@ def result(request):
         quiz_data.save()
         for i in range(10):
             questionId = 'q' + str(i)
-            correctId= 'c' + str(i)
-            selectedId= 's' + str(i)
-            statusId= 'N' + str(i)
+            correctId = 'c' + str(i)
+            selectedId = 's' + str(i)
+            statusId = 'N' + str(i)
             qus = request.POST.get(questionId)
             correct_answer = request.POST.get(correctId)
             selected_answer = request.POST.get(selectedId)
@@ -111,15 +144,14 @@ def result(request):
         q = Quiz.objects.filter(quiz_id=quiz_data.id)
         num, result = cal(q)
         time = request.POST.get('t9')
-        min,sec = min_sec(time)
-
-
-
+        min, sec = min_sec(time)
         context = {'num': num, 'result': result, 'quiz': q, 'min': min, 'sec':sec}
 
 
-        return render(request, 'results.html', context)
 
+        return render(request, 'results.html', context)
+    else:
+        return HttpResponse('somthing is wrong')
 
 
 
@@ -127,16 +159,15 @@ def cal(ob):
     b= 0
     for i in ob :
         b = b + i.status
-
     if b<4 :
         result = 'Fail'
     else:
         result = 'Pass'
-    return b,result
+    return b, result
 
 def min_sec(time):
     t = int(float(time))
     min = round(t/60)
     sec = t%60
-    return min,sec
+    return min, sec
 

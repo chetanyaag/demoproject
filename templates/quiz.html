@@ -36,59 +36,54 @@
 <script>
 
         function check(id,correct_answer,sid){
-        if (id != correct_answer) {
-        var status = 0;
-        document.getElementById(id).style.backgroundColor = 'Red';
-        document.getElementById(correct_answer).style.backgroundColor = 'green';
-        }else if  (id == correct_answer){
-        var status = 1;
-        document.getElementById(id).style.backgroundColor = 'green';
+                 if (id != correct_answer) {
+                     var status = 0;
+                     document.getElementById(id).style.backgroundColor = 'Red';
+                     document.getElementById(correct_answer).style.backgroundColor = 'green';
+                 }else if  (id == correct_answer){
+                            var status = 1;
+                            document.getElementById(id).style.backgroundColor = 'green';
+                 }
+                 var ele = document.getElementById(sid);
+                 for(let i=0; i<4; i++){
+                     ele.getElementsByClassName("btn btn-default ")[i].disabled = true;
+                 }
+
+
+                 suf = sid.split('');
+                 qid = ('q' + suf[1]);
+                 sid = ('s' + suf[1]);
+                 cid = ('c' + suf[1]);
+                 Qid = ('Q' + suf[1]);
+                 Nid = ('N' + suf[1]);
+                 var Q =  document.getElementById(Qid).textContent;
+                 document.getElementById(qid).value = Q;
+                 document.getElementById(sid).value = id;
+                 document.getElementById(cid).value = correct_answer;
+                 document.getElementById(Nid).value = status;
+
         }
-        var ele = document.getElementById(sid);
-        for(let i=0; i<4; i++){
-        ele.getElementsByClassName("btn btn-default ")[i].disabled = true;
-        }
-
-
-        suf = sid.split('');
-        qid = ('q' + suf[1]);
-        sid = ('s' + suf[1]);
-        cid = ('c' + suf[1]);
-        Qid = ('Q' + suf[1]);
-        Nid = ('N' + suf[1]);
-        var Q =  document.getElementById(Qid).textContent;
-        document.getElementById(qid).value = Q;
-        document.getElementById(sid).value = id;
-        document.getElementById(cid).value = correct_answer;
-        document.getElementById(Nid).value = status;
-
-        }
-
-        </script>
+ </script>
 <script>
 
 document.getElementById("j0").style.display="block";
 function kil(x,Sid,c){
-document.getElementById(x).style.display="none";
-y= x.split('');
-var z = y[0]+(parseInt(y[1])+1);
-document.getElementById(z).style.display="block";
+         document.getElementById(x).style.display="none";
+         y= x.split('');
+         var z = y[0]+(parseInt(y[1])+1);
+         document.getElementById(z).style.display="block";
 
-if (z == 'j9'){
-document.getElementById("n9").style.display="none";
-document.getElementById("S9").style.display="block";
-}
-seid = ('s'+y[1]);
-var selected = document.getElementById(seid).value;
-if (selected==''){
-       document.getElementById(('q'+y[1])).value = document.getElementById(('Q'+y[1])).textContent;;
-       document.getElementById(seid).value = 'blank';
-       document.getElementById(('c'+y[1])).value = c ;
-       document.getElementById(('N'+y[1])).value = 0;
-}
-
-
-
+          if (z == 'j9'){
+             document.getElementById("n9").style.display="none";
+             document.getElementById("S9").style.display="block";
+          }
+          var selected = document.getElementById(('s'+y[1])).value;
+          if (selected==''){
+             document.getElementById(('q'+y[1])).value = document.getElementById(('Q'+y[1])).textContent;;
+             document.getElementById(('s'+y[1])).value = 'blank';
+             document.getElementById(('c'+y[1])).value = c ;
+             document.getElementById(('N'+y[1])).value = 0;
+          }
 }
 
 </script>
@@ -96,19 +91,16 @@ if (selected==''){
     var d = new Date();
     var s = d.getTime();
     function tim(){
-    var n = new Date().getTime();
-    var time = ((n-s)/1000)
-    document.getElementById("t9").value = time;
-    if (document.getElementById('s9').value ==''){
-       document.getElementById('q9').value = document.getElementById(('Q9')).textContent;;
-       document.getElementById('s9').value = 'blank';
-       document.getElementById('c9').value = 'blank' ;
-       document.getElementById('N9').value = 0;
-
-    }
-    console.log(n)
-    console.log(s)
-    }
+             var n = new Date().getTime();
+             var time = ((n-s)/1000)
+             document.getElementById("t9").value = time;
+             if (document.getElementById('s9').value ==''){
+                document.getElementById('q9').value = document.getElementById(('Q9')).textContent;;
+                document.getElementById('s9').value = 'blank';
+                document.getElementById('c9').value = 'blank' ;
+                document.getElementById('N9').value = 0;
+             }
+   }
 
 
 </script>

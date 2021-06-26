@@ -7,6 +7,6 @@ urlpatterns =[
     path('login', Login, name='login'),
     path('logout', Logout, name='logout'),
     path('subject', Subjects, name='quiz'),
-    path('result', result)
+    path('result', result),
 
 ]

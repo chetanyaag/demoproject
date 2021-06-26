@@ -6,11 +6,11 @@
   <div class="col-sm-3"></div>
   <div class="col-sm-5">.
   <div class="well well-lg">
-
-<h4>hi {{request.user.username}}</h4><br>
-<h5>you have got {{num}} out of 10</h5><br>
-<h5>you have {{result}} this quiz</h5>
-<h5>you have taken {{min}}min : {{sec}}sec  to complete</h5>
+<centre><h3>Result</h3></centre>
+<h4> Name:</h4>  <div class="well well-sm" style="background-color:#ccffcc;">{{request.user.username}}</div>
+<h4>Correct Answers: </h4> </h4>  <div class="well well-sm" style="background-color:#ccffcc;">{{num}}</div>
+<h4>Status:</h4></h4>  <div class="well well-sm" style="background-color:#ccffcc;">{{result}}</div>
+<h4>Time:</h4>  <div class="well well-sm" style="background-color:#ccffcc;"> {{min}}Min : {{sec}}Sec</div></h4>
 
 
   </div>
